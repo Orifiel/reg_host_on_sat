@@ -1,3 +1,4 @@
+---
 - name: Create Inventory Dinamic
   hosts: localhost
   connection: local
@@ -69,26 +70,26 @@
 ==================================================================
 
 # This needs to run on a host with API access
-- name: "Generate registration command"
-  redhat.satellite.registration_command:
-    username: "admin"
-    password: "changeme"
-    server_url: "https://satellite.example.com"
-  register: command
-  delegate_to: localhost
+#- name: "Generate registration command"
+#  redhat.satellite.registration_command:
+#    username: "admin"
+#    password: "changeme"
+#    server_url: "https://satellite.example.com"
+#  register: command
+#  delegate_to: localhost
 
 # This needs to run on the host being registered
-- name: "Perform registration"
-  ansible.builtin.shell:
-    cmd: "{{ command.registration_command }}"
+#- name: "Perform registration"
+#  ansible.builtin.shell:
+#    cmd: "{{ command.registration_command }}"
 
 ========================================================
-- name: Set a hostgroup on new host registered
-  redhat.satellite.host:
-      username: "{{ satellite_user }}"
-      password: "{{ satellite_pass }}"
-      server_url: "{{ satellite_url }}"
-      name: "{{ inventory_hostname }}"
-      organization: "{{ satellite_org }}"
-      hostgroup: "JOAO"
-      validate_certs: falses
+#- name: Set a hostgroup on new host registered
+#  redhat.satellite.host:
+#      username: "{{ satellite_user }}"
+#      password: "{{ satellite_pass }}"
+#      server_url: "{{ satellite_url }}"
+#      name: "{{ inventory_hostname }}"
+#      organization: "{{ satellite_org }}"
+#     hostgroup: "JOAO"
+#      validate_certs: falses
