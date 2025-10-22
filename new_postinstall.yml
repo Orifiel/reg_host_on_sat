@@ -1,0 +1,51 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Create inventory dynamic
+      ansible.builtin.add_host:
+        name: "{{ item }}.{{ domain }}"
+        group: new_hosts
+      with_items:
+        - "{{ new_hosts }}"
+ 
+- name: Register New RHEL Servers
+  hosts: new_hosts
+  vars:
+    satellite_url: "https://satellite.lab.example.com/"
+    satellite_org: "organization"
+    satellite_user: "user"
+    satellite_pass: #criar a senha com ansible vault
+    #ansible-vault encrypt_string 'redhat@123' -n sat_pass
+    
+  tasks:
+  - name: Working on Server
+    ansible.builtin.debug:
+      msg: "Host: {{ inventory_hostname }} | SO: {{ ansible_distribution }} {{ ansible_distribution_major_version }}"
+    when: ansible_distribution == 'RedHat'
+ 
+  - name: Install Katello CA RPM from Satellite
+    ansible.builtin.dnf:
+      name: "{{ satellite_url }}/pub/katello-ca-consumer-latest.noarch.rpm"
+      state: present
+      sslverify: false
+      validate_certs: false
+      disable_gpg_check: true
+ 
+  - name: Register server on Satellite
+    community.general.redhat_subscription:
+      state: present
+      activationkey: "{{ activation_key }}"
+      org_id: "{{ satellite_org }}"
+      force_register: true
+ 
+  - name: Set a hostgroup on new host registered
+    redhat.satellite.host:
+      username: "{{ satellite_user }}"
+      password: "{{ satellite_pass }}"
+      server_url: "{{ satellite_url }}"
+      name: "{{ inventory_hostname }}"
+      organization: "{{ satellite_org }}"
+      hostgroup: "MYHG"
+      validate_certs: false
