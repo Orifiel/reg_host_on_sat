@@ -5,7 +5,7 @@
   gather_facts: no
   vars:
     temp_inventory: myhosts
-    hosts-list:
+    hosts_list:
       - node1.lab.example.com
       - node2.lab.example.com
   tasks:    
@@ -13,7 +13,7 @@
       ansible.builtin.add-host:
         name: "{{ item }}"
         groups: "{{ temp_inventory }}"
-      loop: "{{ hosts-list }}"
+      loop: "{{ hosts_list }}"
 
 - name: Create Inventory Dinamic
   hosts: Inventory
