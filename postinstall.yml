@@ -19,7 +19,7 @@
   hosts: myhosts
   gather_facts: no
   vars:
-    - satellite_url: "https://satellite.lw76p.sandbox2012.opentlc.com/"
+    - satellite_url: "https://satellite.lab.example.com/"
     - satellite_org: "Default Organization"
     - satellite_ak_rhel8: "RHEL8_DEV"
       
@@ -67,5 +67,5 @@
     #      server_url: "{{ satellite_url }}"
     #      name: "{{ inventory_hostname }}"
     #      organization: "{{ satellite_org }}"
-    #     hostgroup: "JOAO"
+    #      hostgroup: "MYHG"
     #      validate_certs: falses
