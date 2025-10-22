@@ -10,7 +10,7 @@
       - node2.lab.example.com
   tasks:    
     - name: Getting new hosts
-      ansible.builtin.add-host:
+      ansible.builtin.add_host:
         name: "{{ item }}"
         groups: "{{ temp_inventory }}"
       loop: "{{ hosts_list }}"
