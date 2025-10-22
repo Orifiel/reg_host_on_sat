@@ -4,11 +4,10 @@
   connection: local
   gather_facts: no
   vars:
-    temp_inventory: "Inventory"
+    temp_inventory: myhosts
     hosts-list:
-      - host1.example.com
-      - host2.example.com
-      - host3.example.com
+      - node1.lab.example.com
+      - node2.lab.example.com
   tasks:    
     - name: Getting new hosts
       ansible.builtin.add-host:
