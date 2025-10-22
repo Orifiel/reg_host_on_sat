@@ -24,12 +24,7 @@
     - satellite_ak_rhel8: "RHEL8_DEV"
       
   tasks:
-    - name: Working on Server
-      ansible.builtin.debug:
-        msg: "Host: {{ inventory_hostname }} | SO: {{ ansible_distribution }} {{ ansible_distribution_major_version }}"
-      #when: ansible_distribution == 'RedHat'
-
-    
+        
     - name: Install Katello CA RPM from Satellite
       ansible.builtin.dnf:
         name: "{{ satellite_url }}/pub/katello-ca-consumer-latest.noarch.rpm"
