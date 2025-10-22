@@ -59,6 +59,7 @@
     #    cmd: "{{ command.registration_command }}"
     
     #========================================================
+    # This is work
     #- name: Set a hostgroup on new host registered
     #  redhat.satellite.host:
     #      username: "{{ satellite_user }}"
