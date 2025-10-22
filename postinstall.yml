@@ -27,7 +27,7 @@
     - name: Working on Server
       ansible.builtin.debug:
         msg: "Host: {{ inventory_hostname }} | SO: {{ ansible_distribution }} {{ ansible_distribution_major_version }}"
-      when: ansible_distribution == 'RedHat'
+      #when: ansible_distribution == 'RedHat'
 
     
     - name: Install Katello CA RPM from Satellite
@@ -44,19 +44,7 @@
         activationkey: "{{ satellite_ak_rhel8 }}"
         org_id: "{{ satellite_org }}"
         force_register: true
-      when:
-        - ansible_distribution == 'RedHat'
-        - ansible_distribution_major_version == '8'
-  
-    - name: Register RHEL9 server on Satellite
-      community.general.redhat_subscription:
-        state: present
-        activationkey: "{{ satellite_ak_rhel9 }}"
-        org_id: "{{ satellite_org }}"
-        force_register: true
-      when:
-        - ansible_distribution == 'RedHat'
-        - ansible_distribution_major_version == '9'
+     
     
     
     #==================================================================
