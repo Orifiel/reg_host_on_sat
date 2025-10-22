@@ -9,87 +9,87 @@
       - host1.example.com
       - host2.example.com
       - host3.example.com
+  tasks:    
+    - name: Getting new hosts
+      ansible.builtin.add-host:
+        name: "{{ item }}"
+        groups: "{{ temp_inventory }}"
+      loop: "{{ hosts-list }}"
+
+
+
+    - name: Register New RHEL Servers
+      hosts: Inventory_temporary
+      vars:
+        - satellite_url: "https://satellite-url.example.com"
+        - satellite_org: "Satellite Organization"
+        - satellite_ak_rhel8: "RHEL8"
+        - satellite_ak_rhel9: "RHEL9"
     
-  - name: Getting new hosts
-    ansible.builtin.add-host:
-      name: "{{ item }}"
-      groups: "{{ temp_inventory }}"
-    loop: "{{ hosts-list }}"
-
-
-
-- name: Register New RHEL Servers
-  hosts: Inventory_temporary
-  vars:
-    - satellite_url: "https://satellite-url.example.com"
-    - satellite_org: "Satellite Organization"
-    - satellite_ak_rhel8: "RHEL8"
-    - satellite_ak_rhel9: "RHEL9"
-
-  tasks:
-  - name: Working on Server
-    ansible.builtin.debug:
-      msg: "Host: {{ inventory_hostname }} | SO: {{ ansible_distribution }} {{ ansible_distribution_major_version }}"
-    when: ansible_distribution == 'RedHat'
-
-  - name: Unregister RHEL server if already registered
-    community.general.redhat_subscription:
-      state: absent
-    when:
-      - satellite_unreg_first is defined
-
-  - name: Install Katello CA RPM from Satellite
-    ansible.builtin.dnf:
-      name: "{{ satellite_url }}/pub/katello-ca-consumer-latest.noarch.rpm"
-      state: present
-      sslverify: false
-      validate_certs: false
-      disable_gpg_check: true
-
-  - name: Register RHEL8 server on Satellite
-    community.general.redhat_subscription:
-      state: present
-      activationkey: "{{ satellite_ak_rhel8 }}"
-      org_id: "{{ satellite_org }}"
-      force_register: true
-    when:
-      - ansible_distribution == 'RedHat'
-      - ansible_distribution_major_version == '8'
-
-  - name: Register RHEL9 server on Satellite
-    community.general.redhat_subscription:
-      state: present
-      activationkey: "{{ satellite_ak_rhel9 }}"
-      org_id: "{{ satellite_org }}"
-      force_register: true
-    when:
-      - ansible_distribution == 'RedHat'
-      - ansible_distribution_major_version == '9'
-
-
-==================================================================
-
-# This needs to run on a host with API access
-#- name: "Generate registration command"
-#  redhat.satellite.registration_command:
-#    username: "admin"
-#    password: "changeme"
-#    server_url: "https://satellite.example.com"
-#  register: command
-#  delegate_to: localhost
-
-# This needs to run on the host being registered
-#- name: "Perform registration"
-#  ansible.builtin.shell:
-#    cmd: "{{ command.registration_command }}"
-
-========================================================
-#- name: Set a hostgroup on new host registered
-#  redhat.satellite.host:
-#      username: "{{ satellite_user }}"
-#      password: "{{ satellite_pass }}"
-#      server_url: "{{ satellite_url }}"
-#      name: "{{ inventory_hostname }}"
-#      organization: "{{ satellite_org }}"
-#     hostgroup: "JOAO"
-#      validate_certs: falses
+      tasks:
+      - name: Working on Server
+        ansible.builtin.debug:
+          msg: "Host: {{ inventory_hostname }} | SO: {{ ansible_distribution }} {{ ansible_distribution_major_version }}"
+        when: ansible_distribution == 'RedHat'
+    
+      - name: Unregister RHEL server if already registered
+        community.general.redhat_subscription:
+          state: absent
+        when:
+          - satellite_unreg_first is defined
+    
+      - name: Install Katello CA RPM from Satellite
+        ansible.builtin.dnf:
+          name: "{{ satellite_url }}/pub/katello-ca-consumer-latest.noarch.rpm"
+          state: present
+          sslverify: false
+          validate_certs: false
+          disable_gpg_check: true
+    
+      - name: Register RHEL8 server on Satellite
+        community.general.redhat_subscription:
+          state: present
+          activationkey: "{{ satellite_ak_rhel8 }}"
+          org_id: "{{ satellite_org }}"
+          force_register: true
+        when:
+          - ansible_distribution == 'RedHat'
+          - ansible_distribution_major_version == '8'
+    
+      - name: Register RHEL9 server on Satellite
+        community.general.redhat_subscription:
+          state: present
+          activationkey: "{{ satellite_ak_rhel9 }}"
+          org_id: "{{ satellite_org }}"
+          force_register: true
+        when:
+          - ansible_distribution == 'RedHat'
+          - ansible_distribution_major_version == '9'
+    
+    
+    ==================================================================
+    
+    # This needs to run on a host with API access
+    #- name: "Generate registration command"
+    #  redhat.satellite.registration_command:
+    #    username: "admin"
+    #    password: "changeme"
+    #    server_url: "https://satellite.example.com"
+    #  register: command
+    #  delegate_to: localhost
+    
+    # This needs to run on the host being registered
+    #- name: "Perform registration"
+    #  ansible.builtin.shell:
+    #    cmd: "{{ command.registration_command }}"
+    
+    ========================================================
+    #- name: Set a hostgroup on new host registered
+    #  redhat.satellite.host:
+    #      username: "{{ satellite_user }}"
+    #      password: "{{ satellite_pass }}"
+    #      server_url: "{{ satellite_url }}"
+    #      name: "{{ inventory_hostname }}"
+    #      organization: "{{ satellite_org }}"
+    #     hostgroup: "JOAO"
+    #      validate_certs: falses
